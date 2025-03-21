@@ -10,6 +10,19 @@ export default StyleSheet.create({
     marginHorizontal: 15,
     height: 50,
   },
+  addButtonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#3eb5f1', // Updated color
+    width: 38,
+    height: 38,
+    borderRadius: 25,
+  },
+  
+  addButton: {
+    fontSize: 22, // Ensures consistency with other icons
+  },
+
   pollCard: {
     backgroundColor: '#fff',
     borderRadius: 12,
@@ -72,13 +85,20 @@ export default StyleSheet.create({
     height: 6,
     backgroundColor: '#ddd',
     borderRadius: 3,
-    marginVertical: 5,
+    overflow: 'hidden',
+    flexDirection: 'row',
   },
+  
   progressBar: {
     height: 6,
-    backgroundColor: '#f00',
-    borderRadius: 3,
+    backgroundColor: '#ff4d4d', // Yes percentage (default red)
   },
+  
+  progressBarNo: {
+    height: 6,
+    backgroundColor: '#3eb5f1', // No percentage (updated to requested color)
+  },
+  
   stats: {
     fontSize: 14,
     color: '#444',
@@ -89,11 +109,11 @@ export default StyleSheet.create({
     color: '#666',
     marginTop: 2,
   },
-  actions: {
+  actionsWithMargin: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10,
-  },
+    marginTop: 25 // Adds space above the icons
+  },  
   askBox: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -123,6 +143,7 @@ export default StyleSheet.create({
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+    alignItems: 'center',
     paddingVertical: 10,
     borderTopWidth: 1,
     borderColor: '#ddd',
