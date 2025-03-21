@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
 import { AntDesign, Feather } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import styles from './styles';
 
 interface Message {
@@ -16,21 +17,21 @@ interface Message {
   img?: string;
 }
 
-const fetchPolls = async (): Promise<Message[]> => {
+const fetchPolls = async (offset: number): Promise<Message[]> => {
   try {
     const response = await fetch("https://poll.cc/", {
       method: "POST",
       body: JSON.stringify({
         method: "getMessages",
         params: {
-          offset: 0,
+          offset,
           sort: "Most Answered",
           filter: "All Time"
         }
       })
     });
     const data = await response.json();
-    return data.messages.filter((message: Message) => !message.parentMessageId); // Only keep polls
+    return data.messages.filter((message: Message) => !message.parentMessageId);
   } catch (error) {
     console.error("Error fetching polls:", error);
     return [];
@@ -54,14 +55,14 @@ const PollCard: React.FC<{ poll: Message }> = ({ poll }) => (
         </View>
       )}
       <View style={styles.actionsWithMargin}>
-        <TouchableOpacity >
-          <Feather name="message-circle" size={18} color="gray" />
+        <TouchableOpacity>
+          <Feather name="message-circle" size={18} color="#121212" />
         </TouchableOpacity>
-        <TouchableOpacity >
-          <Feather name="refresh-cw" size={18} color="gray" />
+        <TouchableOpacity>
+          <Feather name="refresh-cw" size={18} color="#121212" />
         </TouchableOpacity>
-        <TouchableOpacity >
-          <Feather name="share-2" size={18} color="gray" />
+        <TouchableOpacity>
+          <Feather name="share-2" size={18} color="#121212" />
         </TouchableOpacity>
       </View>
     </View>
@@ -70,9 +71,12 @@ const PollCard: React.FC<{ poll: Message }> = ({ poll }) => (
 
 const PollScreen: React.FC = () => {
   const [polls, setPolls] = useState<Message[]>([]);
+  const [offset, setOffset] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
 
   useEffect(() => {
-    fetchPolls().then(data => setPolls(data));
+    fetchPolls(0).then(data => setPolls(data));
   }, []);
 
   return (
@@ -86,11 +90,13 @@ const PollScreen: React.FC = () => {
       />
       
       <View style={styles.footer}>
-        <TouchableOpacity><AntDesign name="home" size={22} color="gray" /></TouchableOpacity>
+        <TouchableOpacity><AntDesign name="home" size={22} color="#121212" /></TouchableOpacity>
         <TouchableOpacity style={styles.addButtonContainer}>
           <AntDesign name="plus" size={22} color="white" style={styles.addButton} />
         </TouchableOpacity>
-        <TouchableOpacity><AntDesign name="user" size={22} color="gray" /></TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push('/(tabs)/login')}>
+          <AntDesign name="user" size={22} color="#121212" />
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
