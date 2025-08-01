@@ -1,8 +1,11 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import * as GoogleSignIn from 'expo-auth-session/providers/google';
+import { ResponseType } from 'expo-auth-session';
+import { useAuthRequest } from 'expo-auth-session';
+import { makeRedirectUri } from 'expo-auth-session';
 import Logo from '../assets/logo.svg';
 
 import styles from './styles';
@@ -10,13 +13,32 @@ import styles from './styles';
 console.log('Logo: ', Logo)
 
 const LoginScreen: React.FC = () => {
-  const navigation = useNavigation();
+  const [request, response, promptAsync] = GoogleSignIn.useAuthRequest({
+    responseType: ResponseType.IdToken,
+    clientId: 'YOUR_GOOGLE_CLIENT_ID', // Replace with your actual Google client ID
+    redirectUri: makeRedirectUri({ useProxy: true }),
+  });
+
+  React.useEffect(() => {
+    if (response?.type === 'success') {
+      // The user successfully signed in with Google
+      console.log('Google sign-in successful:', response);
+    }
+  }, [response]);
+
+  const handleGoogleSignIn = () => {
+    if (request) {
+      promptAsync();
+    }
+  };
+
+  const handleXSignIn = () => {
+    // Implement actual functionality to sign in with X
+    console.log('X sign-in initiated');
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.closeButton} onPress={() => navigation.goBack()}>
-        <AntDesign name="close" size={24} color="black" />
-      </TouchableOpacity>
       <View style={styles.authBackground}>
         <Image source={require('../assets/bg-poll.jpg')} style={styles.logo} />
       </View>
@@ -26,12 +48,12 @@ const LoginScreen: React.FC = () => {
         <Text style={styles.subtitle}>Public online voting on social and political issues.</Text>
         
         <View style={styles.authOptions}>
-          <TouchableOpacity style={styles.authButton}>
+          <TouchableOpacity style={styles.authButton} onPress={handleGoogleSignIn}>
             <AntDesign name="google" size={20} color="white" />
             <Text style={styles.authButtonText}>Sign in</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.authButton}>
-            <AntDesign name="XOutlined" size={20} color="white" />
+          <TouchableOpacity style={styles.authButton} onPress={handleXSignIn}>
+            <FontAwesome6 name="x-twitter" size={24} color="white" />
             <Text style={styles.authButtonText}>Sign in</Text>
           </TouchableOpacity>
         </View>

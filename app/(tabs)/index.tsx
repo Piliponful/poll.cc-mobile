@@ -19,10 +19,10 @@ interface Message {
 
 const fetchPolls = async (offset: number): Promise<Message[]> => {
   try {
-    const response = await fetch("https://poll.cc/", {
+    const response = await fetch("https://api.poll.cc/", {
       method: "POST",
       body: JSON.stringify({
-        method: "getMessages",
+        method: "getPolls",
         params: {
           offset,
           sort: "Most Answered",
@@ -31,7 +31,8 @@ const fetchPolls = async (offset: number): Promise<Message[]> => {
       })
     });
     const data = await response.json();
-    return data.messages.filter((message: Message) => !message.parentMessageId);
+    console.log('data: ', data)
+    return data.polls.filter((message: Message) => !message.parentMessageId);
   } catch (error) {
     console.error("Error fetching polls:", error);
     return [];
