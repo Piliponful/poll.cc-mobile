@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { View, Text, Image, TouchableOpacity, FlatList, SafeAreaView, TextInput } from 'react-native';
 import { AntDesign, Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import BottomSheet, { BottomSheetView, BottomSheetTextInput } from '@gorhom/bottom-sheet';
 import styles from './styles';
 
 interface Poll {
@@ -98,8 +99,44 @@ const PollScreen: React.FC = () => {
   const [offset, setOffset] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const router = useRouter();
+  
+  // Bottom sheet refs and snap points
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const snapPoints = useMemo(() => ['25%', '50%', '90%'], []);
+  const [sortDropdownVisible, setSortDropdownVisible] = useState(false);
+  const [selectedSort, setSelectedSort] = useState("Most Answered");
+  
+  const sortOptions = [
+    "Most Answered",
+    "Latest",
+    "Most Controversial",
+    "Most Unanimous",
+    "Most Followed Authors"
+  ];
+  // Callbacks
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
+  }, []);
+  const [timeDropdownVisible, setTimeDropdownVisible] = useState(false);
+  const [selectedTime, setSelectedTime] = useState("All Time");
+  
+  const timeOptions = [
+    "Day",
+    "Week",
+    "Month",
+    "Year",
+    "All Time"
+  ];
+  const handleSearchPress = useCallback(() => {
+    bottomSheetRef.current?.expand();
+  }, []);
+
+  const handleClosePress = useCallback(() => {
+    bottomSheetRef.current?.close();
+  }, []);
 
   const loadMorePolls = async () => {
     if (loading || !hasMore) return;
@@ -123,7 +160,12 @@ const PollScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.headerText}>All Time Most Answered</Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>All Time Most Answered</Text>
+        <TouchableOpacity onPress={handleSearchPress} style={styles.searchIconContainer}>
+          <Feather name="search" size={20} color="#121212" />
+        </TouchableOpacity>
+      </View>
 
       <FlatList
         data={polls}
@@ -146,6 +188,94 @@ const PollScreen: React.FC = () => {
           <AntDesign name="user" size={22} color="#121212" />
         </TouchableOpacity>
       </View>
+
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={-1}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+        enablePanDownToClose={true}
+      >
+<BottomSheetView style={styles.bottomSheetCustom}>
+  <View style={styles.dragHandle} />
+
+  <TextInput
+    placeholder="Search polls here..."
+    placeholderTextColor="#ccc"
+    style={styles.searchInputCustom}
+    value={searchQuery}
+    onChangeText={setSearchQuery}
+  />
+
+  <TouchableOpacity style={styles.findButton}>
+    <Text style={styles.findButtonText}>Find <Feather name="search" size={16} color="#fff" /></Text>
+  </TouchableOpacity>
+
+  <View style={{ position: 'relative' }}>
+  <TouchableOpacity
+    style={[
+      styles.dropdown,
+      { borderColor: sortDropdownVisible ? '#f9a825' : 'transparent', borderWidth: 2 }
+    ]}
+    onPress={() => setSortDropdownVisible(!sortDropdownVisible)}
+  >
+    <Text style={styles.dropdownText}>{selectedSort}</Text>
+    <Feather name="chevron-down" size={20} color="#fff" />
+  </TouchableOpacity>
+
+  {sortDropdownVisible && (
+    <View style={styles.dropdownMenu}>
+      {sortOptions.map((option) => (
+        <TouchableOpacity
+          key={option}
+          style={styles.dropdownItem}
+          onPress={() => {
+            setSelectedSort(option);
+            setSortDropdownVisible(false);
+          }}
+        >
+          <Text style={styles.dropdownItemText}>{option}</Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+  )}
+</View>
+
+<Text style={styles.sectionLabel}>Questions of</Text>
+
+<View style={{ position: 'relative' }}>
+  <TouchableOpacity
+    style={[
+      styles.dropdown,
+      { borderColor: timeDropdownVisible ? '#f9a825' : 'transparent', borderWidth: 2 }
+    ]}
+    onPress={() => setTimeDropdownVisible(!timeDropdownVisible)}
+  >
+    <Text style={styles.dropdownText}>{selectedTime}</Text>
+    <Feather name="chevron-down" size={20} color="#fff" />
+  </TouchableOpacity>
+
+  {timeDropdownVisible && (
+    <View style={styles.dropdownMenu}>
+      {timeOptions.map((option) => (
+        <TouchableOpacity
+          key={option}
+          style={styles.dropdownItem}
+          onPress={() => {
+            setSelectedTime(option);
+            setTimeDropdownVisible(false);
+          }}
+        >
+          <Text style={styles.dropdownItemText}>{option}</Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+  )}
+</View>
+
+</BottomSheetView>
+
+      </BottomSheet>
     </SafeAreaView>
   );
 };
