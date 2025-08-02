@@ -5,11 +5,6 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  picker: {
-    marginVertical: 10,
-    marginHorizontal: 15,
-    height: 50,
-  },
   addButtonContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -102,28 +97,6 @@ export default StyleSheet.create({
     borderRadius: 6,
   },
 
-  // Legacy (can remove if unused)
-  progressBarContainer: {
-    height: 6,
-    backgroundColor: '#ddd',
-    borderRadius: 3,
-    overflow: 'hidden',
-    flexDirection: 'row',
-  },
-  progressBar: {
-    height: 6,
-    backgroundColor: '#ff4d4d',
-  },
-  progressBarNo: {
-    height: 6,
-    backgroundColor: '#3eb5f1',
-  },
-  stats: {
-    fontSize: 14,
-    color: '#444',
-    marginTop: 2,
-  },
-
   // Misc
   headerText: {
     fontSize: 16,
@@ -142,11 +115,13 @@ export default StyleSheet.create({
     marginLeft: 8,
   },
   bottomSheetCustom: {
+    flex: 1,
     padding: 20,
     backgroundColor: '#fff',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
+  
   
   dragHandle: {
     width: 40,
@@ -162,17 +137,16 @@ export default StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     borderRadius: 10,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    marginBottom: 15,
+    padding: 15,
+    marginBottom: 20,
   },
   
   findButton: {
     backgroundColor: '#999',
     borderRadius: 10,
-    paddingVertical: 14,
+    padding: 15,
     alignItems: 'center',
-    marginBottom: 25,
+    marginBottom: 20,
   },
   
   findButtonText: {
@@ -202,95 +176,7 @@ export default StyleSheet.create({
     color: '#fff',
     fontSize: 16,
   },
-  bottomSheetContent: {
-    flex: 1,
-    padding: 20,
-  },
-  bottomSheetHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  bottomSheetTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#222',
-  },
-  searchInput: {
-    backgroundColor: '#f5f5f5',
-    borderRadius: 10,
-    padding: 15,
-    fontSize: 16,
-    marginBottom: 20,
-  },
-  searchFilters: {
-    marginTop: 10,
-  },
-  filterTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#222',
-    marginBottom: 15,
-  },
-  filterButton: {
-    backgroundColor: '#f0f0f0',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  filterButtonText: {
-    fontSize: 14,
-    color: '#333',
-    textAlign: 'center',
-  },
-  noImagePlaceholder: {
-    width: '100%',
-    height: 180,
-    borderRadius: 10,
-    backgroundColor: '#ddd',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  noImageText: {
-    color: '#777',
-    fontSize: 16,
-  },
-  actionButton: {
-    padding: 8,
-    borderRadius: 8,
-    backgroundColor: '#f2f2f2',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginHorizontal: 5,
-  },
-  askBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    backgroundColor: '#eee',
-    borderTopWidth: 1,
-    borderColor: '#ddd',
-  },
-  input: {
-    flex: 1,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    marginRight: 10,
-  },
-  askButton: {
-    backgroundColor: '#f00',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-  },
-  askText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
+  
   dropdownMenu: {
     position: 'absolute',
     top: 55,
