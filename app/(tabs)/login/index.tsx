@@ -1,38 +1,69 @@
-import React from 'react'
-import { View, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native'
+import React, { useEffect } from 'react'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  SafeAreaView,
+  Alert,
+} from 'react-native'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { AntDesign } from '@expo/vector-icons'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
-import * as GoogleSignIn from 'expo-auth-session/providers/google'
-import { ResponseType } from 'expo-auth-session'
-import { useAuthRequest } from 'expo-auth-session'
-import { makeRedirectUri } from 'expo-auth-session'
-import Logo from '../assets/logo.svg'
+import { useRouter } from 'expo-router'
 
 import styles from './styles'
+import Logo from '../assets/logo.svg'
+import { useSrpcApi } from '@/hooks/useSrpcApi'
+import { useAuth } from '@/contexts/auth'
 
 const LoginScreen: React.FC = () => {
-  const [request, response, promptAsync] = GoogleSignIn.useAuthRequest({
-    responseType: ResponseType.IdToken,
-    clientId: 'YOUR_GOOGLE_CLIENT_ID', // Replace with your actual Google client ID
-    redirectUri: makeRedirectUri({ useProxy: true }),
-  })
+  const router = useRouter()
+  const srpc = useSrpcApi()
+  const { updateUser } = useAuth()
 
-  React.useEffect(() => {
-    if (response?.type === 'success') {
-      // The user successfully signed in with Google
-      console.log('Google sign-in successful:', response)
-    }
-  }, [response])
+  useEffect(() => {
+    GoogleSignin.configure({
+      iosClientId:
+        '693824624560-cqup1ibb0ql5a9fe2n346mkovvetnchk.apps.googleusercontent.com', // from GoogleService-Info.plist
+      webClientId:
+        '693824624560-f3596tslik0htj03c2p4cqnevievv8ej.apps.googleusercontent.com', // for verifying ID token in backend
+    })
+  }, [])
 
-  const handleGoogleSignIn = () => {
-    if (request) {
-      promptAsync()
+  const handleGoogleSignIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices()
+      const userInfo = await GoogleSignin.signIn()
+      console.log('userInfo', userInfo)
+      const user = userInfo?.data?.user
+      if (!user?.email || !user?.name) {
+        Alert.alert('Login failed', 'Missing email or name')
+        return
+      }
+
+      const { jwt, error } = await srpc.createUserNew({
+        email: user.email,
+        name: user.name,
+        picture: user.photo,
+        sendEmails: true,
+      })
+
+      if (jwt) {
+        await updateUser({ jwt })
+        router.replace('/(tabs)')
+      } else {
+        Alert.alert('Login failed', error || 'Unknown error')
+      }
+    } catch (err: any) {
+      console.error('Google Sign-In Error:', err)
+      Alert.alert('Google Sign-In Error', err?.message || 'Failed to sign in')
     }
   }
 
   const handleXSignIn = () => {
-    // Implement actual functionality to sign in with X
     console.log('X sign-in initiated')
+    // Add later if needed
   }
 
   return (

@@ -24,18 +24,8 @@ export default function TabLayout() {
     console.log('search', search)
     console.log('sortAndFilter', sortAndFilter)
 
-    if (user && !groupAppliedToPolls?._id) {
-      return
-    }
-
     fetchPolls({ offset: 0, reset: true })
-  }, [
-    Boolean(user),
-    search,
-    sortAndFilter.filter,
-    sortAndFilter.sort,
-    groupAppliedToPolls?._id,
-  ])
+  }, [search, sortAndFilter.filter, sortAndFilter.sort])
 
   return (
     <Tabs
@@ -50,7 +40,6 @@ export default function TabLayout() {
             position: 'absolute',
             display: 'none',
           },
-          default: {},
         }),
       }}
     >
@@ -59,7 +48,7 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
+            <IconSymbol size={24} name="house.fill" color={color} />
           ),
         }}
       />
@@ -68,7 +57,7 @@ export default function TabLayout() {
         options={{
           title: 'Create Poll',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="plus.circle.fill" color={color} />
+            <IconSymbol size={24} name="plus.circle.fill" color={color} />
           ),
         }}
       />

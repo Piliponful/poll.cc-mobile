@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native'
 
 export default StyleSheet.create({
   container: {
@@ -6,10 +6,11 @@ export default StyleSheet.create({
     backgroundColor: '#121212',
   },
   authBackground: {
-    flex: 1,
     position: 'absolute',
-    width: '100%',
-    height: '100%',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   backgroundImage: {
     width: '100%',
@@ -27,13 +28,10 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: '100%', 
-    height: '100%', // Make it full height
-    position: 'absolute', // Make it cover the entire screen
-    top: 0,
-    left: 0,
-    resizeMode: 'cover', // Ensures the image fills the space
-  },  
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
   title: {
     fontSize: 22,
     fontWeight: 'bold',
@@ -80,4 +78,4 @@ export default StyleSheet.create({
     fontWeight: '600',
     marginLeft: 8,
   },
-});
+})

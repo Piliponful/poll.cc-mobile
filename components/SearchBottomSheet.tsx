@@ -40,11 +40,13 @@ const SearchBottomSheet: React.FC<SearchBottomSheetProps> = ({
   const handleSortChange = (sort: string) => {
     setSortDropdownVisible(false)
     setSortAndFilter(sort, sortAndFilter.filter || undefined)
+    bottomSheetRef.current?.close()
   }
 
   const handleTimeChange = (filter: string) => {
     setTimeDropdownVisible(false)
     setSortAndFilter(sortAndFilter.sort || undefined, filter)
+    bottomSheetRef.current?.close()
   }
 
   return (

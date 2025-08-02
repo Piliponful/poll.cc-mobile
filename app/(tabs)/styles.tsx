@@ -1,20 +1,28 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native'
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
   },
+  optionSelected: {
+    borderColor: '#6c63ff',
+    borderWidth: 2,
+    backgroundColor: 'rgba(108, 99, 255, 0.08)',
+  },
+
   addButtonContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#3eb5f1',
-    width: 38,
-    height: 38,
-    borderRadius: 25,
-  },
-  addButton: {
-    fontSize: 22,
+    width: 28,
+    height: 28,
+    borderRadius: '100%',
+    borderWidth: 1,
+    borderColor: '#121212',
+    position: 'absolute',
+    left: '50%',
+    transform: [{ translateX: '-50%' }],
+    top: 7,
   },
   pollCard: {
     backgroundColor: '#fff',
@@ -61,10 +69,12 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingTop: 10,
     borderTopWidth: 1,
     borderColor: '#ddd',
     backgroundColor: '#fff',
+    position: 'relative',
+    // borderBottomWidth: 1,
   },
 
   // 💥 NEW styles for multi-option rendering:
@@ -99,17 +109,25 @@ export default StyleSheet.create({
 
   // Misc
   headerText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
-    marginVertical: 10,
+    marginVertical: 5,
     color: '#222',
   },
+  timestamp: {
+    fontSize: 12,
+    color: '#888',
+    marginTop: 8,
+    textAlign: 'right',
+  },
+
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingVertical: 5,
+    paddingTop: 0,
   },
   searchIconContainer: {
     marginLeft: 8,
@@ -121,8 +139,7 @@ export default StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
-  
-  
+
   dragHandle: {
     width: 40,
     height: 5,
@@ -131,7 +148,7 @@ export default StyleSheet.create({
     alignSelf: 'center',
     marginBottom: 20,
   },
-  
+
   searchInputCustom: {
     backgroundColor: '#333',
     color: '#fff',
@@ -140,7 +157,7 @@ export default StyleSheet.create({
     padding: 15,
     marginBottom: 20,
   },
-  
+
   findButton: {
     backgroundColor: '#999',
     borderRadius: 10,
@@ -148,20 +165,20 @@ export default StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  
+
   findButtonText: {
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
   },
-  
+
   sectionLabel: {
     fontSize: 14,
     color: '#555',
     marginBottom: 8,
     marginLeft: 4,
   },
-  
+
   dropdown: {
     backgroundColor: '#222',
     padding: 15,
@@ -171,12 +188,12 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  
+
   dropdownText: {
     color: '#fff',
     fontSize: 16,
   },
-  
+
   dropdownMenu: {
     position: 'absolute',
     top: 55,
@@ -187,15 +204,14 @@ export default StyleSheet.create({
     paddingVertical: 8,
     zIndex: 1000,
   },
-  
+
   dropdownItem: {
     paddingVertical: 12,
     paddingHorizontal: 16,
   },
-  
+
   dropdownItemText: {
     color: '#fff',
     fontSize: 15,
   },
-  
-});
+})

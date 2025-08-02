@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   FlatList,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native'
 import { AntDesign, Feather } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
@@ -21,11 +22,13 @@ const PollScreen: React.FC = () => {
   const snapPoints = useMemo(() => ['25%', '50%', '90%'], [])
 
   const { polls, loading, handleLoadMore } = usePollsContext()
-  console.log('polls', polls)
 
   const handleSearchPress = useCallback(() => {
     bottomSheetRef.current?.expand()
   }, [])
+
+  // Show centered loader for initial load, footer loader for subsequent loads
+  const isInitialLoad = loading && polls.length === 0
 
   return (
     <SafeAreaView style={styles.container}>
@@ -39,38 +42,41 @@ const PollScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      <FlatList
-        data={polls}
-        keyExtractor={item => item._id}
-        renderItem={({ item }) => <PollCard poll={item} />}
-        onEndReached={handleLoadMore}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={
-          loading ? (
-            <Text style={{ textAlign: 'center', marginVertical: 10 }}>
-              Loading...
-            </Text>
-          ) : null
-        }
-      />
+      {isInitialLoad ? (
+        <View
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <ActivityIndicator size="small" color="#121212" />
+        </View>
+      ) : (
+        <FlatList
+          data={polls}
+          keyExtractor={item => item._id}
+          renderItem={({ item }) => <PollCard poll={item} />}
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={
+            loading ? (
+              <View style={{ alignItems: 'center', paddingVertical: 20 }}>
+                <ActivityIndicator size="small" color="#121212" />
+              </View>
+            ) : null
+          }
+        />
+      )}
 
       <View style={styles.footer}>
         <TouchableOpacity>
-          <AntDesign name="home" size={22} color="#121212" />
+          <AntDesign name="home" size={20} color="#121212" />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.addButtonContainer}
           onPress={() => router.push('/(tabs)/create-poll')}
         >
-          <AntDesign
-            name="plus"
-            size={22}
-            color="white"
-            style={styles.addButton}
-          />
+          <AntDesign name="plus" size={20} color="#121212" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router.push('/(tabs)/login')}>
-          <AntDesign name="user" size={22} color="#121212" />
+          <AntDesign name="user" size={20} color="#121212" />
         </TouchableOpacity>
       </View>
 

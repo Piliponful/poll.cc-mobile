@@ -14,7 +14,6 @@ export interface Poll {
   hide: boolean
   img?: string
   options: Option[]
-  totalVotes: number
   me?: {
     answer: string
     pictureUrl: string

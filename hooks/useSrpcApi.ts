@@ -1,5 +1,5 @@
 import { isObject } from 'lodash-es'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import * as SecureStore from 'expo-secure-store'
 
 const srpcFunctionNames = [
   'savePoll',
@@ -52,7 +52,7 @@ export const useSrpcApi = () => {
     needToThrow: boolean = false
   ): Promise<any> => {
     try {
-      const jwt = await AsyncStorage.getItem('jwt')
+      const jwt = await SecureStore.getItemAsync('jwt')
 
       const response = await fetch(
         process.env.EXPO_PUBLIC_API_URL || 'https://api.poll.cc/',

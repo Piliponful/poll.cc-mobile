@@ -258,11 +258,12 @@ export const PollsProvider = ({
     fetchWithDefaultSortAndFilter?: boolean
     updateVotesOnly?: boolean
   } = {}) => {
+    if (loading) return
+
     if (
       !fetchWithDefaultSortAndFilter &&
       (!sortAndFilter.sort || !sortAndFilter.filter)
     ) {
-      console.log('problem with filters and sort: ', sortAndFilter)
       return
     }
 
@@ -271,12 +272,10 @@ export const PollsProvider = ({
     }
 
     if (reset && !updateVotesOnly) {
-      console.log('resetting polls and not updateVotesOnly')
       setPolls([])
     }
 
     try {
-      console.log('fetching polls', srpcApiFunction)
       const { polls: newPolls, hasMore: newHasMore } = await srpcApiFunction({
         offset,
         sort: fetchWithDefaultSortAndFilter
@@ -288,8 +287,6 @@ export const PollsProvider = ({
         search,
         userId,
       })
-
-      console.log('newPolls', newPolls)
 
       if (updateVotesOnly) {
         setPolls(() => newPolls)
