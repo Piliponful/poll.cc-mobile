@@ -11,6 +11,8 @@ import { useColorScheme } from '@/hooks/useColorScheme'
 import { useSearchAndUserId } from '@/contexts/location'
 import { usePollsContext } from '@/contexts/polls'
 import { useAuth } from '@/contexts/auth'
+import { useGroups } from '@/contexts/groups'
+import { useSrpcApi } from '@/hooks/useSrpcApi'
 
 export default function TabLayout() {
   const colorScheme = useColorScheme()
@@ -19,9 +21,21 @@ export default function TabLayout() {
   const { user, groupAppliedToPolls } = useAuth()
   const { search } = useSearchAndUserId()
   const { fetchPolls, sortAndFilter } = usePollsContext()
+  const { setGroups, setLoading } = useGroups()
+  const srpcApi = useSrpcApi()
+
   useEffect(() => {
     fetchPolls({ offset: 0, reset: true })
   }, [search, sortAndFilter.filter, sortAndFilter.sort])
+
+  useEffect(() => {
+    srpcApi.getGroups().then(({ groups }) => {
+      if (groups) {
+        setGroups(groups)
+        setLoading(false)
+      }
+    })
+  }, [Boolean(user)])
 
   return (
     <Tabs
