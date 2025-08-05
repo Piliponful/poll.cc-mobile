@@ -97,9 +97,7 @@ const GroupsScreen: React.FC = () => {
     <View key={group._id} style={styles.groupCard}>
       <View style={styles.groupHeader}>
         <View style={styles.groupInfo}>
-          <Text style={styles.groupName}>
-            {group.name} {group.isEveryoneGroup && '🌍'}
-          </Text>
+          <Text style={styles.groupName}>{group.name}</Text>
           <Text style={styles.memberCount}>
             {group.userCount} {group.userCount === 1 ? 'person' : 'people'}
           </Text>
@@ -112,37 +110,41 @@ const GroupsScreen: React.FC = () => {
       </View>
 
       <View style={styles.groupOptions}>
-        <TouchableOpacity
-          style={styles.optionButton}
-          onPress={() => applyToPolls(group._id)}
-        >
-          {group.applyToPolls ? (
-            <AntDesign name="check" size={16} color="#1da1f2" />
-          ) : (
-            <View style={styles.radioButton} />
-          )}
-          <Text style={styles.optionText}>Apply to polls</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity
+            style={styles.optionButton}
+            onPress={() => applyToPolls(group._id)}
+          >
+            {group.applyToPolls ? (
+              <AntDesign name="check" size={16} color="#1da1f2" />
+            ) : (
+              <View style={styles.radioButton} />
+            )}
+            <Text style={styles.optionText}>Apply to polls</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.optionButton}
-          onPress={() => applyToVotes(group._id)}
-        >
-          {group.applyToVotes ? (
-            <AntDesign name="check" size={16} color="#1da1f2" />
-          ) : (
-            <View style={styles.radioButton} />
-          )}
-          <Text style={styles.optionText}>Apply to votes</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.optionButton}
+            onPress={() => applyToVotes(group._id)}
+          >
+            {group.applyToVotes ? (
+              <AntDesign name="check" size={16} color="#1da1f2" />
+            ) : (
+              <View style={styles.radioButton} />
+            )}
+            <Text style={styles.optionText}>Apply to votes</Text>
+          </TouchableOpacity>
+        </View>
 
-        <TouchableOpacity style={styles.optionButton}>
-          <Text style={styles.optionText}>Combine</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity style={styles.optionButton}>
+            <Text style={styles.optionText}>Combine</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.optionButton}>
-          <Text style={styles.optionText}>See people</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.optionButton}>
+            <Text style={styles.optionText}>See people</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   )
@@ -207,35 +209,34 @@ const styles = {
   },
   content: {
     flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 16,
+    paddingTop: 0,
   },
   groupCard: {
-    backgroundColor: '#f8f9fa',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: '#e9ecef',
+    backgroundColor: '#fff',
+    paddingVertical: 24,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
   },
   groupHeader: {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
     justifyContent: 'space-between' as const,
-    marginBottom: 12,
+    marginBottom: 16,
   },
   groupInfo: {
     flex: 1,
   },
   groupName: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600' as const,
     color: '#121212',
-    marginBottom: 2,
+    marginBottom: 4,
   },
   memberCount: {
     fontSize: 14,
-    color: '#666',
+    color: '#999',
+    fontWeight: '400' as const,
   },
   pinnedIcon: {
     padding: 4,
@@ -243,27 +244,34 @@ const styles = {
   groupOptions: {
     gap: 8,
   },
+  buttonRow: {
+    flexDirection: 'row' as const,
+    gap: 8,
+  },
   optionButton: {
+    flex: 1,
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    backgroundColor: '#fff',
+    justifyContent: 'center' as const,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    backgroundColor: '#fafafa',
     borderWidth: 1,
-    borderColor: '#e9ecef',
+    borderColor: '#f0f0f0',
   },
   optionText: {
-    fontSize: 14,
+    fontSize: 15,
     color: '#121212',
-    marginLeft: 8,
+    marginLeft: 12,
+    fontWeight: '500' as const,
   },
   radioButton: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    borderWidth: 1.5,
+    borderColor: '#ddd',
   },
   loadingContainer: {
     flex: 1,
