@@ -16,6 +16,7 @@ import styles from './styles'
 import Logo from '../assets/logo.svg'
 import { useSrpcApi } from '@/hooks/useSrpcApi'
 import { useAuth } from '@/contexts/auth'
+import { handleTwitterLogin } from '@/functions/handleTwitterLogin'
 
 const LoginScreen: React.FC = () => {
   const router = useRouter()
@@ -61,9 +62,26 @@ const LoginScreen: React.FC = () => {
     }
   }
 
-  const handleXSignIn = () => {
-    console.log('X sign-in initiated')
-    // Add later if needed
+  const handleXSignIn = async () => {
+    try {
+      const result = await handleTwitterLogin()
+
+      if (result.success && result.jwt) {
+        await updateUser({ jwt: result.jwt })
+        router.replace('/(tabs)')
+      } else {
+        Alert.alert(
+          'Login failed',
+          result.error || 'Failed to sign in with Twitter'
+        )
+      }
+    } catch (err: any) {
+      console.error('Twitter Sign-In Error:', err)
+      Alert.alert(
+        'Twitter Sign-In Error',
+        err?.message || 'Failed to sign in with Twitter'
+      )
+    }
   }
 
   return (
