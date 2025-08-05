@@ -10,7 +10,7 @@ import {
   Animated,
 } from 'react-native'
 import { Image } from 'expo-image'
-import { Feather } from '@expo/vector-icons'
+import { Feather, AntDesign } from '@expo/vector-icons'
 import { Poll } from '@/types'
 import styles from '../app/(tabs)/styles'
 import { formatDistanceToNow } from 'date-fns'
@@ -207,9 +207,43 @@ const PollCard: React.FC<PollCardProps> = ({ poll }) => {
                     )}
                     <Text style={styles.optionLabel}>{option.text}</Text>
                   </View>
-                  <Text style={styles.optionPercent}>
-                    {percent}% ({option.votes})
-                  </Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    {option.votes > 0 && (
+                      <TouchableOpacity
+                        onPress={() =>
+                          router.push(
+                            `/questions/${poll.shortId}/${option.id}/users`
+                          )
+                        }
+                        style={styles.viewVotesContainer}
+                      >
+                        <View style={styles.overlappingAvatars}>
+                          {/* Show up to 3 placeholder avatars based on vote count */}
+                          {Array.from({
+                            length: Math.min(3, option.votes),
+                          }).map((_, index) => (
+                            <View
+                              key={index}
+                              style={[
+                                styles.voterAvatar,
+                                styles.voterAvatarPlaceholder,
+                                {
+                                  zIndex: 3 - index,
+                                  marginLeft: index > 0 ? -8 : 0,
+                                },
+                              ]}
+                            >
+                              <AntDesign name="user" size={12} color="#666" />
+                            </View>
+                          ))}
+                        </View>
+                        <Text style={styles.viewVotesText}>View votes</Text>
+                      </TouchableOpacity>
+                    )}
+                    <Text style={styles.optionPercent}>
+                      {percent}% ({option.votes})
+                    </Text>
+                  </View>
                 </View>
                 <View style={styles.optionBarBackground}>
                   <View

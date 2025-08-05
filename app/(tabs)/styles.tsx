@@ -89,6 +89,34 @@ export default StyleSheet.create({
     fontSize: 14,
     color: '#888',
   },
+  viewVotesContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 12,
+    marginRight: 8,
+  },
+  overlappingAvatars: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  voterAvatar: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#fff',
+  },
+  voterAvatarPlaceholder: {
+    backgroundColor: '#f0f0f0',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  viewVotesText: {
+    fontSize: 12,
+    color: '#1da1f2',
+    marginLeft: 6,
+    fontWeight: '500',
+  },
   optionBarBackground: {
     height: 12,
     backgroundColor: '#eee',
