@@ -7,6 +7,7 @@ import { User } from '@/types'
 
 interface AuthContextType {
   user: User | null
+  isLoading: boolean
   setUser: React.Dispatch<React.SetStateAction<User | null>>
   updateJwt: () => Promise<void>
   updateUser: ({ jwt }: { jwt: string }) => Promise<void>
@@ -26,6 +27,7 @@ export const useAuth = () => {
   const removeAllUserTokens = async () => {
     await SecureStore.deleteItemAsync(storageKeys.jwt)
     await SecureStore.deleteItemAsync(storageKeys.realJwt)
+    context.setUser(null)
   }
 
   return { ...(context as any), removeAllUserTokens }
@@ -33,6 +35,7 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const srpcApi = useSrpcApi()
 
   useEffect(() => {
@@ -41,11 +44,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (jwt) {
         try {
           const decoded = jwtDecode(jwt)
-          setUser(decoded as User)
+          // Check if JWT is expired
+          const currentTime = Date.now() / 1000
+          if (decoded.exp && decoded.exp < currentTime) {
+            console.warn('JWT is expired, clearing storage')
+            await SecureStore.deleteItemAsync(storageKeys.jwt)
+            await SecureStore.deleteItemAsync(storageKeys.realJwt)
+            setUser(null)
+          } else {
+            setUser(decoded as User)
+          }
         } catch (err) {
           console.warn('Failed to decode JWT from storage', err)
+          // Clear invalid JWT
+          await SecureStore.deleteItemAsync(storageKeys.jwt)
+          await SecureStore.deleteItemAsync(storageKeys.realJwt)
+          setUser(null)
         }
       }
+      setIsLoading(false)
     }
 
     initUserFromToken()
@@ -67,6 +84,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     <AuthContext.Provider
       value={{
         user,
+        isLoading,
         setUser,
         updateJwt,
         updateUser,

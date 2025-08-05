@@ -17,13 +17,7 @@ export default function TabLayout() {
   const { user, groupAppliedToPolls } = useAuth()
   const { search } = useSearchAndUserId()
   const { fetchPolls, sortAndFilter } = usePollsContext()
-
   useEffect(() => {
-    console.log('user', user)
-    console.log('groupAppliedToPolls', groupAppliedToPolls)
-    console.log('search', search)
-    console.log('sortAndFilter', sortAndFilter)
-
     fetchPolls({ offset: 0, reset: true })
   }, [search, sortAndFilter.filter, sortAndFilter.sort])
 

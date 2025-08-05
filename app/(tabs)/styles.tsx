@@ -6,11 +6,16 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
   },
   optionSelected: {
-    borderColor: '#6c63ff',
-    borderWidth: 2,
-    backgroundColor: 'rgba(108, 99, 255, 0.08)',
+    // borderColor: '#6c63ff',
+    // borderWidth: 2,
+    // backgroundColor: 'rgba(108, 99, 255, 0.08)',
   },
-
+  optionUserAvatar: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    marginRight: 6,
+  },
   addButtonContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -26,16 +31,9 @@ export default StyleSheet.create({
   },
   pollCard: {
     backgroundColor: '#fff',
-    borderRadius: 12,
     padding: 15,
-    marginBottom: 12,
-    marginLeft: 10,
-    marginRight: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    shadowColor: 'transparent',
-    shadowOpacity: 0,
-    elevation: 0,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#e1e8ed',
   },
   pollImage: {
     width: '100%',
@@ -109,8 +107,8 @@ export default StyleSheet.create({
 
   // Misc
   headerText: {
-    fontSize: 14,
-    fontWeight: 'bold',
+    fontSize: 15,
+    // fontWeight: 'bold',
     marginVertical: 5,
     color: '#222',
   },

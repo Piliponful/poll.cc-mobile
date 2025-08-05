@@ -36,7 +36,6 @@ const PollCard: React.FC<PollCardProps> = ({ poll }) => {
   const { onOptionSelect } = usePollsContext()
   const router = useRouter()
   const { user } = useAuth()
-  console.log('poll', JSON.stringify(poll, null, 2))
   const { search } = useSearchAndUserId()
   const getHighlightedText = (text: string) => {
     if (!search) return text
@@ -49,6 +48,8 @@ const PollCard: React.FC<PollCardProps> = ({ poll }) => {
     setPressedId(null)
     router.push(`/questions/${poll.shortId}/${optionId}/users`)
   }
+
+  console.log('user', user?.pictureUrl)
 
   return (
     <View style={styles.pollCard}>
@@ -109,7 +110,15 @@ const PollCard: React.FC<PollCardProps> = ({ poll }) => {
               ]}
             >
               <View style={styles.optionLabelRow}>
-                <Text style={styles.optionLabel}>{option.text}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  {isSelected && user?.pictureUrl && (
+                    <Image
+                      source={{ uri: user.pictureUrl }}
+                      style={styles.optionUserAvatar}
+                    />
+                  )}
+                  <Text style={styles.optionLabel}>{option.text}</Text>
+                </View>
                 <Text style={styles.optionPercent}>
                   {percent}% ({option.votes})
                 </Text>
