@@ -1,10 +1,11 @@
 import { Tabs } from 'expo-router'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Platform } from 'react-native'
 
 import { HapticTab } from '@/components/HapticTab'
 import { IconSymbol } from '@/components/ui/IconSymbol'
 import TabBarBackground from '@/components/ui/TabBarBackground'
+import VennDiagram from '@/components/VennDiagram'
 import { Colors } from '@/constants/Colors'
 import { useColorScheme } from '@/hooks/useColorScheme'
 import { useSearchAndUserId } from '@/contexts/location'
@@ -13,6 +14,7 @@ import { useAuth } from '@/contexts/auth'
 
 export default function TabLayout() {
   const colorScheme = useColorScheme()
+  const [showGroupsActive, setShowGroupsActive] = useState(false)
 
   const { user, groupAppliedToPolls } = useAuth()
   const { search } = useSearchAndUserId()
@@ -53,6 +55,19 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <IconSymbol size={24} name="plus.circle.fill" color={color} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="groups"
+        options={{
+          title: 'Groups',
+          tabBarIcon: ({ color }) => (
+            <VennDiagram size={24} fill={color} myHover={showGroupsActive} />
+          ),
+        }}
+        listeners={{
+          tabPress: () => setShowGroupsActive(true),
+          blur: () => setShowGroupsActive(false),
         }}
       />
     </Tabs>

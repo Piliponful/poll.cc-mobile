@@ -1,11 +1,10 @@
-import React, { useRef, useMemo, useCallback, useEffect } from 'react'
+import React, { useRef, useMemo, useCallback, useEffect, useState } from 'react'
 import {
   View,
   Text,
   TouchableOpacity,
   FlatList,
   SafeAreaView,
-  ActivityIndicator,
 } from 'react-native'
 import { AntDesign, Feather } from '@expo/vector-icons'
 import { useRootNavigationState, useRouter } from 'expo-router'
@@ -15,6 +14,8 @@ import * as SecureStore from 'expo-secure-store'
 import styles from './styles'
 import PollCard from '../../components/PollCard'
 import SearchBottomSheet from '../../components/SearchBottomSheet'
+import ModernSpinner from '../../components/ModernSpinner'
+import VennDiagram from '../../components/VennDiagram'
 import { usePollsContext } from '@/contexts/polls'
 import { useAuth } from '@/contexts/auth'
 
@@ -24,6 +25,7 @@ const PollScreen: React.FC = () => {
   const snapPoints = useMemo(() => ['25%', '50%', '90%'], [])
   const { user, isLoading } = useAuth()
   const hasRedirected = useRef(false)
+  const [showGroupsActive, setShowGroupsActive] = useState(false)
 
   const { polls, loading, handleLoadMore, sortAndFilter } = usePollsContext()
 
@@ -65,7 +67,7 @@ const PollScreen: React.FC = () => {
         <View
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         >
-          <ActivityIndicator size="small" color="#121212" />
+          <ModernSpinner size={32} color="#121212" />
         </View>
       </SafeAreaView>
     )
@@ -89,7 +91,7 @@ const PollScreen: React.FC = () => {
         <View
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         >
-          <ActivityIndicator size="small" color="#121212" />
+          <ModernSpinner size={32} color="#121212" />
         </View>
       ) : (
         <FlatList
@@ -101,7 +103,7 @@ const PollScreen: React.FC = () => {
           ListFooterComponent={
             loading ? (
               <View style={{ alignItems: 'center', paddingVertical: 20 }}>
-                <ActivityIndicator size="small" color="#121212" />
+                <ModernSpinner size={24} color="#121212" />
               </View>
             ) : null
           }
@@ -111,6 +113,13 @@ const PollScreen: React.FC = () => {
       <View style={styles.footer}>
         <TouchableOpacity>
           <AntDesign name="home" size={20} color="#121212" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPressIn={() => setShowGroupsActive(true)}
+          onPressOut={() => setShowGroupsActive(false)}
+          onPress={() => router.push('/(tabs)/groups')}
+        >
+          <VennDiagram size={28} fill="#121212" myHover={showGroupsActive} />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.addButtonContainer}
