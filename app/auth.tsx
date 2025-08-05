@@ -12,14 +12,9 @@ export default function AuthCallback() {
   useEffect(() => {
     const processAuthCallback = async () => {
       try {
-        console.log('Auth callback received params:', params)
-
         // Check if we have the required OAuth parameters
         const oauthToken = params.oauth_token as string
         const oauthVerifier = params.oauth_verifier as string
-
-        console.log('OAuth token:', oauthToken)
-        console.log('OAuth verifier:', oauthVerifier)
 
         if (!oauthToken || !oauthVerifier) {
           console.error('Missing OAuth parameters')
@@ -27,7 +22,6 @@ export default function AuthCallback() {
           return
         }
 
-        console.log('Starting Twitter OAuth completion...')
         // Complete the Twitter OAuth flow with the tokens from the deep link
         const result = await completeTwitterOAuth(oauthToken, oauthVerifier)
 
@@ -35,11 +29,9 @@ export default function AuthCallback() {
           await updateUser({ jwt: result.jwt })
           router.replace('/(tabs)')
         } else {
-          console.error('Twitter OAuth failed:', result.error)
           router.replace('/(tabs)/login')
         }
       } catch (error) {
-        console.error('Auth callback error:', error)
         router.replace('/(tabs)/login')
       }
     }

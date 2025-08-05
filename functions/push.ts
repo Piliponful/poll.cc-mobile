@@ -20,8 +20,6 @@ export const subscribeToPush = async () => {
   // 🔒 Check for existing subscription first
   const existingSubscription = await registration.pushManager.getSubscription()
 
-  console.log('existingSubscription', existingSubscription)
-
   // 🔑 Subscribe only if no existing one
   const newSubscription = await registration.pushManager.subscribe({
     userVisibleOnly: true,

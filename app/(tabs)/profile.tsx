@@ -4,9 +4,9 @@ import {
   Text,
   TouchableOpacity,
   SafeAreaView,
-  Image,
   FlatList,
 } from 'react-native'
+import { Image } from 'expo-image'
 import { AntDesign, Feather } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import { useAuth } from '@/contexts/auth'
@@ -120,6 +120,8 @@ const ProfileScreen: React.FC = () => {
     </View>
   )
 
+  console.log('user profile picture', user?.pictureUrl)
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -138,16 +140,25 @@ const ProfileScreen: React.FC = () => {
       <View style={styles.profileSection}>
         <View style={styles.avatarContainer}>
           {user?.pictureUrl ? (
-            <Image source={{ uri: user.pictureUrl }} style={styles.avatar} />
+            <Image
+              source={{ uri: user.pictureUrl }}
+              style={styles.avatar}
+              contentFit="cover"
+              transition={200}
+            />
           ) : (
             <View style={styles.avatarPlaceholder}>
-              <AntDesign name="user" size={40} color="#666" />
+              <AntDesign name="user" size={24} color="#666" />
             </View>
           )}
         </View>
 
-        <Text style={styles.username}>{user?.username || 'User'}</Text>
-        <Text style={styles.email}>{user?.email || 'No email available'}</Text>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.username}>{user?.username || 'User'}</Text>
+          <Text style={styles.email}>
+            {user?.email || 'No email available'}
+          </Text>
+        </View>
       </View>
 
       <View style={styles.tabContainer}>

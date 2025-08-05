@@ -303,7 +303,6 @@ export const PollsProvider = ({
 
       setLoading(false)
     } catch (err) {
-      console.log('error fetching polls', err)
       if (!updateVotesOnly) {
         setPolls([])
         setHasMore(false)

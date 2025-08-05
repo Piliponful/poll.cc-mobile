@@ -36,7 +36,6 @@ const LoginScreen: React.FC = () => {
     try {
       await GoogleSignin.hasPlayServices()
       const userInfo = await GoogleSignin.signIn()
-      console.log('userInfo', userInfo)
       const user = userInfo?.data?.user
       if (!user?.email || !user?.name) {
         Alert.alert('Login failed', 'Missing email or name')

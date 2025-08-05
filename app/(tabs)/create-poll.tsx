@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   View,
   Text,
@@ -9,67 +9,64 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
-} from 'react-native';
-import { AntDesign, Feather } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import styles from './create-poll-styles';
+} from 'react-native'
+import { AntDesign, Feather } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
+import styles from './create-poll-styles'
 
 const CreatePollScreen: React.FC = () => {
-  const [question, setQuestion] = useState('');
-  const [options, setOptions] = useState(['', '']); // Start with 2 empty options
-  const router = useRouter();
+  const [question, setQuestion] = useState('')
+  const [options, setOptions] = useState(['', '']) // Start with 2 empty options
+  const router = useRouter()
 
   const addOption = () => {
-    if (options.length < 6) { // Limit to 6 options
-      setOptions([...options, '']);
+    if (options.length < 6) {
+      // Limit to 6 options
+      setOptions([...options, ''])
     }
-  };
+  }
 
   const removeOption = (index: number) => {
-    if (options.length > 2) { // Keep minimum 2 options
-      const newOptions = options.filter((_, i) => i !== index);
-      setOptions(newOptions);
+    if (options.length > 2) {
+      // Keep minimum 2 options
+      const newOptions = options.filter((_, i) => i !== index)
+      setOptions(newOptions)
     }
-  };
+  }
 
   const updateOption = (index: number, text: string) => {
-    const newOptions = [...options];
-    newOptions[index] = text;
-    setOptions(newOptions);
-  };
+    const newOptions = [...options]
+    newOptions[index] = text
+    setOptions(newOptions)
+  }
 
   const handleSubmit = () => {
     // Validate form
     if (!question.trim()) {
-      Alert.alert('Error', 'Please enter a question');
-      return;
+      Alert.alert('Error', 'Please enter a question')
+      return
     }
 
-    const validOptions = options.filter(option => option.trim() !== '');
+    const validOptions = options.filter(option => option.trim() !== '')
     if (validOptions.length < 2) {
-      Alert.alert('Error', 'Please enter at least 2 options');
-      return;
+      Alert.alert('Error', 'Please enter at least 2 options')
+      return
     }
 
     // Here you would typically send the data to your API
-    console.log('Creating poll:', { question, options: validOptions });
-    
+
     // For now, just show success and go back
-    Alert.alert(
-      'Success',
-      'Poll created successfully!',
-      [
-        {
-          text: 'OK',
-          onPress: () => router.back(),
-        },
-      ]
-    );
-  };
+    Alert.alert('Success', 'Poll created successfully!', [
+      {
+        text: 'OK',
+        onPress: () => router.back(),
+      },
+    ])
+  }
 
   const handleBack = () => {
-    router.back();
-  };
+    router.back()
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -86,7 +83,10 @@ const CreatePollScreen: React.FC = () => {
           <View style={styles.placeholder} />
         </View>
 
-        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+        >
           {/* Question Input */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Question</Text>
@@ -110,7 +110,7 @@ const CreatePollScreen: React.FC = () => {
                   style={styles.optionInput}
                   placeholder={`Option ${index + 1}`}
                   value={option}
-                  onChangeText={(text) => updateOption(index, text)}
+                  onChangeText={text => updateOption(index, text)}
                   maxLength={100}
                 />
                 {options.length > 2 && (
@@ -125,7 +125,10 @@ const CreatePollScreen: React.FC = () => {
             ))}
 
             {options.length < 6 && (
-              <TouchableOpacity onPress={addOption} style={styles.addOptionButton}>
+              <TouchableOpacity
+                onPress={addOption}
+                style={styles.addOptionButton}
+              >
                 <AntDesign name="plus" size={20} color="#3eb5f1" />
                 <Text style={styles.addOptionText}>Add Option</Text>
               </TouchableOpacity>
@@ -139,7 +142,7 @@ const CreatePollScreen: React.FC = () => {
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
-  );
-};
+  )
+}
 
-export default CreatePollScreen; 
+export default CreatePollScreen

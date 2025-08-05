@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import {
   View,
   Text,
-  Image,
   TouchableOpacity,
   Pressable,
   useWindowDimensions,
   Alert,
   Share,
 } from 'react-native'
+import { Image } from 'expo-image'
 import { Feather } from '@expo/vector-icons'
 import { Poll } from '@/types'
 import styles from '../app/(tabs)/styles'
@@ -49,12 +49,15 @@ const PollCard: React.FC<PollCardProps> = ({ poll }) => {
     router.push(`/questions/${poll.shortId}/${optionId}/users`)
   }
 
-  console.log('user', user?.pictureUrl)
-
   return (
     <View style={styles.pollCard}>
       {poll.img && (
-        <Image source={{ uri: poll.img }} style={styles.pollImage} />
+        <Image
+          source={{ uri: poll.img }}
+          style={styles.pollImage}
+          contentFit="cover"
+          transition={200}
+        />
       )}
 
       <View style={styles.pollContent}>
@@ -115,6 +118,8 @@ const PollCard: React.FC<PollCardProps> = ({ poll }) => {
                     <Image
                       source={{ uri: user.pictureUrl }}
                       style={styles.optionUserAvatar}
+                      contentFit="cover"
+                      transition={200}
                     />
                   )}
                   <Text style={styles.optionLabel}>{option.text}</Text>

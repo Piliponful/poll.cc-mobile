@@ -79,8 +79,6 @@ export const completeTwitterOAuth = async (
     // Call mobile-specific endpoint that returns JSON instead of redirecting
     const mobileCallbackUrl = `${apiUrl}/api/auth/twitter/mobile-callback?oauth_token=${oauthToken}&oauth_verifier=${oauthVerifier}`
 
-    console.log('Calling mobile callback URL:', mobileCallbackUrl)
-
     const callbackResponse = await fetch(mobileCallbackUrl, {
       method: 'GET',
       headers: {
