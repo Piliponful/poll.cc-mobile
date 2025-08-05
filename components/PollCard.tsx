@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   useWindowDimensions,
   Alert,
   Share,
+  Animated,
 } from 'react-native'
 import { Image } from 'expo-image'
 import { Feather } from '@expo/vector-icons'
@@ -37,6 +38,19 @@ const PollCard: React.FC<PollCardProps> = ({ poll }) => {
   const router = useRouter()
   const { user } = useAuth()
   const { search } = useSearchAndUserId()
+
+  // Animation refs for each option
+  const animatedValues = useRef<{ [key: string]: Animated.Value }>({})
+  const longPressTimers = useRef<{ [key: string]: NodeJS.Timeout }>({})
+  const isLongPressing = useRef<{ [key: string]: boolean }>({})
+
+  // Initialize animation value for an option if it doesn't exist
+  const getAnimatedValue = (optionId: string) => {
+    if (!animatedValues.current[optionId]) {
+      animatedValues.current[optionId] = new Animated.Value(0)
+    }
+    return animatedValues.current[optionId]
+  }
   const getHighlightedText = (text: string) => {
     if (!search) return text
     const regex = new RegExp(`(${search})`, 'gi')
@@ -44,9 +58,63 @@ const PollCard: React.FC<PollCardProps> = ({ poll }) => {
     return html
   }
 
-  const handleLongPress = (optionId: string) => {
-    setPressedId(null)
-    router.push(`/questions/${poll.shortId}/${optionId}/users`)
+  const handleLongPressStart = (optionId: string) => {
+    const animatedValue = getAnimatedValue(optionId)
+
+    // Mark as long pressing
+    isLongPressing.current[optionId] = true
+
+    // Animate progress from 0 to 1 over 600ms (long press duration)
+    Animated.timing(animatedValue, {
+      toValue: 1,
+      duration: 600,
+      useNativeDriver: false,
+    }).start()
+
+    // Set timer for actual long press action
+    longPressTimers.current[optionId] = setTimeout(() => {
+      router.push(`/questions/${poll.shortId}/${optionId}/users`)
+    }, 600)
+  }
+
+  const handlePressIn = (optionId: string) => {
+    // Start long press detection after a shorter delay
+    const timer = setTimeout(() => {
+      if (!isLongPressing.current[optionId]) {
+        handleLongPressStart(optionId)
+      }
+    }, 100) // Only start long press after 100ms
+
+    // Store the timer so we can cancel it
+    longPressTimers.current[`${optionId}_detection`] = timer
+  }
+
+  const handleLongPressEnd = (optionId: string) => {
+    const animatedValue = getAnimatedValue(optionId)
+
+    // Clear the long press detection timer
+    if (longPressTimers.current[`${optionId}_detection`]) {
+      clearTimeout(longPressTimers.current[`${optionId}_detection`])
+      delete longPressTimers.current[`${optionId}_detection`]
+    }
+
+    // Clear the long press action timer if it exists
+    if (longPressTimers.current[optionId]) {
+      clearTimeout(longPressTimers.current[optionId])
+      delete longPressTimers.current[optionId]
+    }
+
+    // Reset animation to 0
+    Animated.timing(animatedValue, {
+      toValue: 0,
+      duration: 150,
+      useNativeDriver: false,
+    }).start()
+
+    // Clear long pressing flag after a short delay to prevent vote
+    setTimeout(() => {
+      isLongPressing.current[optionId] = false
+    }, 50)
   }
 
   return (
@@ -79,61 +147,90 @@ const PollCard: React.FC<PollCardProps> = ({ poll }) => {
           const isSelected = poll.me?.answer === option.id
 
           return (
-            <Pressable
+            <Animated.View
               key={option.id}
-              onPress={() => {
-                if (!user) {
-                  Alert.alert('Login Required', 'Please log in to vote.')
-                  router.push('/login')
-                  return
-                }
-                if (user._id === poll.userId) {
-                  Alert.alert(
-                    'Cannot Vote',
-                    'You cannot vote on your own poll.'
-                  )
-                  return
-                }
-                if (poll.me?.answer) {
-                  Alert.alert(
-                    'Already Voted',
-                    'You have already voted on this poll.'
-                  )
-                  return
-                }
-
-                onOptionSelect?.({ optionId: option.id, pollId: poll._id })
-              }}
-              onLongPress={() => handleLongPress(option.id)}
-              delayLongPress={600}
-              onPressOut={() => setCancelingId(null)}
               style={[
-                styles.optionContainer,
-                isSelected && styles.optionSelected,
+                {
+                  position: 'relative',
+                },
               ]}
             >
-              <View style={styles.optionLabelRow}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  {isSelected && user?.pictureUrl && (
-                    <Image
-                      source={{ uri: user.pictureUrl }}
-                      style={styles.optionUserAvatar}
-                      contentFit="cover"
-                      transition={200}
-                    />
-                  )}
-                  <Text style={styles.optionLabel}>{option.text}</Text>
+              <Pressable
+                onPress={() => {
+                  // Don't vote if we were long pressing
+                  if (isLongPressing.current[option.id]) {
+                    return
+                  }
+
+                  if (!user) {
+                    Alert.alert('Login Required', 'Please log in to vote.')
+                    router.push('/login')
+                    return
+                  }
+                  if (user._id === poll.userId) {
+                    Alert.alert(
+                      'Cannot Vote',
+                      'You cannot vote on your own poll.'
+                    )
+                    return
+                  }
+                  if (poll.me?.answer) {
+                    Alert.alert(
+                      'Already Voted',
+                      'You have already voted on this poll.'
+                    )
+                    return
+                  }
+
+                  onOptionSelect?.({ optionId: option.id, pollId: poll._id })
+                }}
+                onPressIn={() => handlePressIn(option.id)}
+                onPressOut={() => {
+                  handleLongPressEnd(option.id)
+                  setCancelingId(null)
+                }}
+                delayLongPress={600}
+                style={[
+                  styles.optionContainer,
+                  isSelected && styles.optionSelected,
+                ]}
+              >
+                <View style={styles.optionLabelRow}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    {isSelected && user?.pictureUrl && (
+                      <Image
+                        source={{ uri: user.pictureUrl }}
+                        style={styles.optionUserAvatar}
+                        contentFit="cover"
+                        transition={200}
+                      />
+                    )}
+                    <Text style={styles.optionLabel}>{option.text}</Text>
+                  </View>
+                  <Text style={styles.optionPercent}>
+                    {percent}% ({option.votes})
+                  </Text>
                 </View>
-                <Text style={styles.optionPercent}>
-                  {percent}% ({option.votes})
-                </Text>
-              </View>
-              <View style={styles.optionBarBackground}>
-                <View
-                  style={[styles.optionBarFill, { width: `${percent}%` }]}
-                />
-              </View>
-            </Pressable>
+                <View style={styles.optionBarBackground}>
+                  <View
+                    style={[styles.optionBarFill, { width: `${percent}%` }]}
+                  />
+                  <Animated.View
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      height: '100%',
+                      backgroundColor: 'rgba(29, 161, 242, 0.3)',
+                      width: getAnimatedValue(option.id).interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ['0%', '100%'],
+                      }),
+                    }}
+                  />
+                </View>
+              </Pressable>
+            </Animated.View>
           )
         })}
 
