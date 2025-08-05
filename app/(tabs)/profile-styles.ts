@@ -22,6 +22,9 @@ export default StyleSheet.create({
     fontWeight: '600',
     color: '#121212',
   },
+  settingsButton: {
+    padding: 4,
+  },
   headerSpacer: {
     width: 32,
   },
@@ -83,6 +86,62 @@ export default StyleSheet.create({
     fontSize: 16,
     color: '#121212',
     marginLeft: 12,
+  },
+  // Tab styles
+  tabContainer: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e1e8ed',
+    backgroundColor: '#fff',
+  },
+  tabButton: {
+    flex: 1,
+    paddingVertical: 16,
+    alignItems: 'center',
+    borderBottomWidth: 2,
+    borderBottomColor: 'transparent',
+  },
+  activeTabButton: {
+    borderBottomColor: '#1da1f2',
+  },
+  tabText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#666',
+  },
+  activeTabText: {
+    color: '#1da1f2',
+    fontWeight: '600',
+  },
+  tabContent: {
+    flex: 1,
+  },
+  // Loading and empty states
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: '#666',
+    marginTop: 8,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+  },
+  loadingFooter: {
+    paddingVertical: 20,
+    alignItems: 'center',
   },
   logoutButton: {
     flexDirection: 'row',

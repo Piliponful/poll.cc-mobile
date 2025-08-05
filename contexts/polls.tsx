@@ -28,6 +28,7 @@ interface PollsContextType {
     reset?: boolean
     fetchWithDefaultSortAndFilter?: boolean
     updateVotesOnly?: boolean
+    userId?: string
   }) => Promise<void>
   handleLoadMore: () => void
   createGroup: (pollId: string, optionId: string) => void
@@ -252,11 +253,13 @@ export const PollsProvider = ({
     reset = false,
     fetchWithDefaultSortAndFilter = false,
     updateVotesOnly = false,
+    userId: customUserId,
   }: {
     offset?: number
     reset?: boolean
     fetchWithDefaultSortAndFilter?: boolean
     updateVotesOnly?: boolean
+    userId?: string
   } = {}) => {
     if (loading) return
 
@@ -285,7 +288,7 @@ export const PollsProvider = ({
           ? initialStateForSortAndFilterForMessages.filter
           : sortAndFilter.filter,
         search,
-        userId,
+        userId: customUserId || userId,
       })
 
       if (updateVotesOnly) {
@@ -311,7 +314,12 @@ export const PollsProvider = ({
 
   const handleLoadMore = () => {
     if (!loading && hasMore) {
-      fetchPolls({ offset })
+      // For user-specific contexts, we need to pass the userId
+      const params: any = { offset }
+      if (variant === 'userAnswers' || variant === 'userQuestions') {
+        params.userId = user?._id
+      }
+      fetchPolls(params)
     }
   }
 

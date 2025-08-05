@@ -17,7 +17,12 @@ import { store } from '@/store' // 👈 make sure you have a Redux store exporte
 
 import { AuthProvider, useAuth } from '@/contexts/auth'
 import { LocationProvider, useSearchAndUserId } from '@/contexts/location'
-import { PollsProvider, usePollsContext } from '@/contexts/polls'
+import {
+  PollsProvider,
+  usePollsContext,
+  UserAnswerPollsProvider,
+  UserQuestionPollsProvider,
+} from '@/contexts/polls'
 import { GroupsProvider } from '@/contexts/groups'
 
 // Prevent splash screen from hiding before font loading
@@ -48,14 +53,18 @@ export default function RootLayout() {
             <AuthProvider>
               <LocationProvider>
                 <PollsProvider>
-                  <Stack screenOptions={{}}>
-                    <Stack.Screen
-                      name="(tabs)"
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen name="+not-found" />
-                  </Stack>
-                  <StatusBar style="auto" />
+                  <UserAnswerPollsProvider>
+                    <UserQuestionPollsProvider>
+                      <Stack screenOptions={{}}>
+                        <Stack.Screen
+                          name="(tabs)"
+                          options={{ headerShown: false }}
+                        />
+                        <Stack.Screen name="+not-found" />
+                      </Stack>
+                      <StatusBar style="auto" />
+                    </UserQuestionPollsProvider>
+                  </UserAnswerPollsProvider>
                 </PollsProvider>
               </LocationProvider>
             </AuthProvider>
