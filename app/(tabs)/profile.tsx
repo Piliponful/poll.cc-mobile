@@ -17,6 +17,7 @@ import {
 import PollCard from '@/components/PollCard'
 import ModernSpinner from '@/components/ModernSpinner'
 import styles from './profile-styles'
+import BottomBar from '../../components/BottomBar'
 
 const ProfileScreen: React.FC = () => {
   const router = useRouter()
@@ -197,6 +198,8 @@ const ProfileScreen: React.FC = () => {
       </View>
 
       {activeTab === 'votes' ? renderVotesTab() : renderPollsTab()}
+
+      <BottomBar currentScreen="profile" />
     </SafeAreaView>
   )
 }

@@ -13,6 +13,7 @@ import {
 import { AntDesign, Feather } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import styles from './create-poll-styles'
+import BottomBar from '../../components/BottomBar'
 
 const CreatePollScreen: React.FC = () => {
   const [question, setQuestion] = useState('')
@@ -141,6 +142,8 @@ const CreatePollScreen: React.FC = () => {
           </TouchableOpacity>
         </ScrollView>
       </KeyboardAvoidingView>
+
+      <BottomBar currentScreen="create-poll" />
     </SafeAreaView>
   )
 }

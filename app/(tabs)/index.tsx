@@ -15,7 +15,7 @@ import styles from './styles'
 import PollCard from '../../components/PollCard'
 import SearchBottomSheet from '../../components/SearchBottomSheet'
 import ModernSpinner from '../../components/ModernSpinner'
-import VennDiagram from '../../components/VennDiagram'
+import BottomBar from '../../components/BottomBar'
 import { usePollsContext } from '@/contexts/polls'
 import { useAuth } from '@/contexts/auth'
 
@@ -25,7 +25,6 @@ const PollScreen: React.FC = () => {
   const snapPoints = useMemo(() => ['25%', '50%', '90%'], [])
   const { user, isLoading } = useAuth()
   const hasRedirected = useRef(false)
-  const [showGroupsActive, setShowGroupsActive] = useState(false)
 
   const { polls, loading, handleLoadMore, sortAndFilter } = usePollsContext()
 
@@ -110,27 +109,7 @@ const PollScreen: React.FC = () => {
         />
       )}
 
-      <View style={styles.footer}>
-        <TouchableOpacity>
-          <AntDesign name="home" size={20} color="#121212" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPressIn={() => setShowGroupsActive(true)}
-          onPressOut={() => setShowGroupsActive(false)}
-          onPress={() => router.push('/(tabs)/groups')}
-        >
-          <VennDiagram size={28} fill="#121212" myHover={showGroupsActive} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.addButtonContainer}
-          onPress={() => router.push('/(tabs)/create-poll')}
-        >
-          <AntDesign name="plus" size={20} color="#121212" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleProfilePress}>
-          <AntDesign name="user" size={20} color="#121212" />
-        </TouchableOpacity>
-      </View>
+      <BottomBar currentScreen="index" />
 
       <SearchBottomSheet
         bottomSheetRef={bottomSheetRef}

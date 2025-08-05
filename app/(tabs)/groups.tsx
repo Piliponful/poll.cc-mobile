@@ -3,6 +3,7 @@ import { View, Text, SafeAreaView } from 'react-native'
 import { useRouter } from 'expo-router'
 import { TouchableOpacity } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
+import BottomBar from '../../components/BottomBar'
 
 const GroupsScreen: React.FC = () => {
   const router = useRouter()
@@ -67,6 +68,8 @@ const GroupsScreen: React.FC = () => {
           Coming soon! This will be where you can manage and view groups.
         </Text>
       </View>
+
+      <BottomBar currentScreen="groups" />
     </SafeAreaView>
   )
 }
