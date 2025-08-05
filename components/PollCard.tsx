@@ -118,7 +118,11 @@ const PollCard: React.FC<PollCardProps> = ({ poll }) => {
   }
 
   return (
-    <View style={styles.pollCard}>
+    <TouchableOpacity
+      style={styles.pollCard}
+      onPress={() => router.push(`/questions/${poll.shortId}/details`)}
+      activeOpacity={0.7}
+    >
       {poll.img && (
         <Image
           source={{ uri: poll.img }}
@@ -300,7 +304,7 @@ const PollCard: React.FC<PollCardProps> = ({ poll }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 

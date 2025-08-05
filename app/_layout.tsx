@@ -64,6 +64,10 @@ export default function RootLayout() {
                           name="questions/[shortId]/[answerId]/users"
                           options={{ headerShown: false }}
                         />
+                        <Stack.Screen
+                          name="questions/[shortId]/details"
+                          options={{ headerShown: false }}
+                        />
                         <Stack.Screen name="+not-found" />
                       </Stack>
                       <StatusBar style="auto" />
